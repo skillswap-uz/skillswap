@@ -6,7 +6,7 @@
     <title>SkillSwap — Exchange Skills Worldwide</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', sans-serif; background: #0a0a0f; color: white; }
+        body { font-family: 'Segoe UI', sans-serif; background: #0a0a0f; color: white; overflow-x: hidden; }
 
         /* NAV */
         nav {
@@ -15,6 +15,7 @@
             border-bottom: 1px solid rgba(255,255,255,0.08);
             position: sticky; top: 0; backdrop-filter: blur(20px); z-index: 100;
         }
+        .logo img { height: 40px; vertical-align: middle; margin-right: 8px; }
         .logo { font-size: 24px; font-weight: 800; color: #a78bfa; letter-spacing: -1px; }
         .nav-links a {
             color: rgba(255,255,255,0.6); text-decoration: none;
@@ -27,6 +28,10 @@
             margin-left: 30px; transition: background 0.3s;
         }
         .nav-btn:hover { background: #6d28d9; }
+
+        /* ANIMATIONS */
+        .fade-in { opacity: 0; transform: translateY(30px); transition: all 0.7s ease; }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
 
         /* HERO */
         .hero {
@@ -75,10 +80,7 @@
 
         /* FEATURES */
         .features { padding: 100px 60px; text-align: center; }
-        .features h2 {
-            font-size: 48px; font-weight: 900; letter-spacing: -2px;
-            margin-bottom: 16px;
-        }
+        .features h2 { font-size: 48px; font-weight: 900; letter-spacing: -2px; margin-bottom: 16px; }
         .features > p { color: rgba(255,255,255,0.4); font-size: 18px; margin-bottom: 60px; }
         .cards { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; }
         .card {
@@ -90,6 +92,24 @@
         .card-icon { font-size: 36px; margin-bottom: 20px; }
         .card h3 { font-size: 20px; font-weight: 700; margin-bottom: 12px; }
         .card p { color: rgba(255,255,255,0.5); font-size: 15px; line-height: 1.6; }
+
+        /* ABOUT */
+        .about {
+            padding: 100px 60px; display: flex; align-items: center;
+            gap: 60px; flex-wrap: wrap;
+            background: rgba(255,255,255,0.02);
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+        .about-text { flex: 1; min-width: 300px; }
+        .about-text h2 { font-size: 48px; font-weight: 900; letter-spacing: -2px; margin-bottom: 20px; }
+        .about-text p { color: rgba(255,255,255,0.5); font-size: 17px; line-height: 1.8; margin-bottom: 16px; }
+        .about-boxes { flex: 1; min-width: 300px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .about-box {
+            background: rgba(124,58,237,0.1); border: 1px solid rgba(124,58,237,0.2);
+            border-radius: 12px; padding: 24px; text-align: center;
+        }
+        .about-box h4 { font-size: 28px; font-weight: 900; color: #a78bfa; }
+        .about-box p { color: rgba(255,255,255,0.5); font-size: 13px; margin-top: 4px; }
 
         /* SIGNUP */
         .signup-section {
@@ -116,6 +136,30 @@
         }
         .signup-box button:hover { background: #6d28d9; }
 
+        /* CONTACT */
+        .contact {
+            padding: 100px 20px; text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+        .contact h2 { font-size: 48px; font-weight: 900; letter-spacing: -2px; margin-bottom: 12px; }
+        .contact > p { color: rgba(255,255,255,0.4); margin-bottom: 40px; font-size: 18px; }
+        .contact-box {
+            background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px; padding: 48px; max-width: 520px; margin: 0 auto;
+        }
+        .contact-box input, .contact-box textarea {
+            width: 100%; padding: 14px 18px; margin: 8px 0;
+            background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px; color: white; font-size: 15px; outline: none;
+        }
+        .contact-box textarea { height: 120px; resize: none; }
+        .contact-box button {
+            width: 100%; padding: 16px; background: #7c3aed; color: white;
+            border: none; border-radius: 10px; font-size: 17px; font-weight: 700;
+            cursor: pointer; margin-top: 16px; transition: background 0.3s;
+        }
+        .contact-box button:hover { background: #6d28d9; }
+
         /* FOOTER */
         footer {
             text-align: center; padding: 40px;
@@ -129,50 +173,65 @@
     <nav>
         <div class="logo"><img src="logo.png" style="height:40px; vertical-align:middle; margin-right:8px;">SkillSwap</div>
         <div class="nav-links">
-            <a href="#">How it Works</a>
-            <a href="#">Skills</a>
-            <a href="#">Community</a>
+            <a href="#about">About</a>
+            <a href="#features">Features</a>
+            <a href="#contact">Contact</a>
             <a class="nav-btn" href="#signup">Get Started</a>
         </div>
     </nav>
 
     <section class="hero">
-        <div class="hero-badge">✨ Free Skill Exchange Platform</div>
-        <h1>Learn Anything.<br>Teach Everything.</h1>
-        <p>Connect with people worldwide and exchange skills — no money needed, just knowledge.</p>
-        <div class="hero-btns">
+        <div class="hero-badge fade-in">✨ Free Skill Exchange Platform</div>
+        <h1 class="fade-in">Learn Anything.<br>Teach Everything.</h1>
+        <p class="fade-in">Connect with people worldwide and exchange skills — no money needed, just knowledge.</p>
+        <div class="hero-btns fade-in">
             <a class="btn-primary" href="#signup">Start Swapping Free</a>
-            <a class="btn-secondary" href="#">See How It Works</a>
+            <a class="btn-secondary" href="#about">See How It Works</a>
         </div>
     </section>
 
     <div class="stats">
-        <div class="stat"><h3>10K+</h3><p>Active Members</p></div>
-        <div class="stat"><h3>50+</h3><p>Skills Available</p></div>
-        <div class="stat"><h3>95%</h3><p>Satisfaction Rate</p></div>
-        <div class="stat"><h3>150+</h3><p>Countries</p></div>
+        <div class="stat fade-in"><h3>10K+</h3><p>Active Members</p></div>
+        <div class="stat fade-in"><h3>50+</h3><p>Skills Available</p></div>
+        <div class="stat fade-in"><h3>95%</h3><p>Satisfaction Rate</p></div>
+        <div class="stat fade-in"><h3>150+</h3><p>Countries</p></div>
     </div>
 
-    <section class="features">
-        <h2>Why SkillSwap?</h2>
-        <p>The smartest way to learn new skills without spending money</p>
+    <section class="about" id="about">
+        <div class="about-text fade-in">
+            <h2>Why We Built SkillSwap</h2>
+            <p>We believe everyone has something valuable to teach. Whether you're a coding expert, a talented chef, or a music enthusiast — your skills have value.</p>
+            <p>SkillSwap connects people who want to learn with people who want to teach — completely free, no money involved, just pure knowledge exchange.</p>
+            <p>Join thousands of learners and teachers worldwide who are already swapping skills every day!</p>
+        </div>
+        <div class="about-boxes fade-in">
+            <div class="about-box"><h4>10K+</h4><p>Happy Members</p></div>
+            <div class="about-box"><h4>150+</h4><p>Countries</p></div>
+            <div class="about-box"><h4>50+</h4><p>Skill Categories</p></div>
+            <div class="about-box"><h4>Free</h4><p>Always & Forever</p></div>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <h2 class="fade-in">Why SkillSwap?</h2>
+        <p class="fade-in">The smartest way to learn new skills without spending money</p>
         <div class="cards">
-            <div class="card">
+            <div class="card fade-in">
                 <div class="card-icon">🎯</div>
                 <h3>List Your Skill</h3>
                 <p>Tell us what you can teach — coding, cooking, music, design, languages, anything!</p>
             </div>
-            <div class="card">
+            <div class="card fade-in">
                 <div class="card-icon">🤖</div>
                 <h3>Smart Matching</h3>
                 <p>Our system finds the perfect skill match for you from thousands of members worldwide.</p>
             </div>
-            <div class="card">
+            <div class="card fade-in">
                 <div class="card-icon">🌍</div>
                 <h3>Global Community</h3>
                 <p>Connect with learners and teachers from 150+ countries around the world.</p>
             </div>
-            <div class="card">
+            <div class="card fade-in">
                 <div class="card-icon">🔒</div>
                 <h3>Safe & Secure</h3>
                 <p>Verified profiles and secure messaging to ensure your safety at all times.</p>
@@ -181,9 +240,9 @@
     </section>
 
     <section class="signup-section" id="signup">
-        <h2>Join SkillSwap Today</h2>
-        <p>Start your skill exchange journey in seconds</p>
-        <div class="signup-box">
+        <h2 class="fade-in">Join SkillSwap Today</h2>
+        <p class="fade-in">Start your skill exchange journey in seconds</p>
+        <div class="signup-box fade-in">
             <input type="text" id="name" placeholder="Your Full Name" />
             <input type="email" placeholder="Your Email Address" />
             <select>
@@ -210,11 +269,33 @@
         </div>
     </section>
 
+    <section class="contact" id="contact">
+        <h2 class="fade-in">Get In Touch</h2>
+        <p class="fade-in">Have questions? We'd love to hear from you!</p>
+        <div class="contact-box fade-in">
+            <input type="text" placeholder="Your Name" />
+            <input type="email" placeholder="Your Email" />
+            <textarea placeholder="Your Message..."></textarea>
+            <button onclick="sendMessage()">📩 Send Message</button>
+        </div>
+    </section>
+
     <footer>
         <p>© 2026 SkillSwap — Connect. Learn. Grow. | Made with ❤️ for the world</p>
     </footer>
 
     <script>
+        // Scroll animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
         function joinNow() {
             const name = document.getElementById('name').value;
             if(name === '') {
@@ -222,6 +303,10 @@
             } else {
                 alert('Welcome to SkillSwap, ' + name + '! 🎉 We will contact you soon!');
             }
+        }
+
+        function sendMessage() {
+            alert('Message sent! ✅ We will get back to you soon!');
         }
     </script>
 
