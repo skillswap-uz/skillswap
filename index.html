@@ -4,71 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SkillSwap — Exchange Skills Worldwide</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', sans-serif; background: #0a0a0f; color: white; }
-
-        nav {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 20px 60px; background: rgba(255,255,255,0.03);
-            border-bottom: 1px solid rgba(255,255,255,0.08);
-            position: sticky; top: 0; backdrop-filter: blur(20px); z-index: 100;
-        }
-        .logo img { height: 40px; vertical-align: middle; margin-right: 8px; }
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 60px; background: rgba(255,255,255,0.03); border-bottom: 1px solid rgba(255,255,255,0.08); position: sticky; top: 0; backdrop-filter: blur(20px); z-index: 100; }
         .logo { font-size: 24px; font-weight: 800; color: #a78bfa; }
+        .logo img { height: 40px; vertical-align: middle; margin-right: 8px; }
         .nav-links a { color: rgba(255,255,255,0.6); text-decoration: none; margin-left: 30px; font-size: 15px; }
         .nav-btn { background: #7c3aed; color: white; padding: 10px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; margin-left: 30px; }
-
-        .hero {
-            text-align: center; padding: 120px 20px 80px;
-            background: radial-gradient(ellipse at top, #1e1040 0%, #0a0a0f 70%);
-        }
-        .hero h1 {
-            font-size: 72px; font-weight: 900; line-height: 1.1; letter-spacing: -3px; margin-bottom: 24px;
-            background: linear-gradient(135deg, #fff 0%, #a78bfa 100%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
+        .hero { text-align: center; padding: 120px 20px 80px; background: radial-gradient(ellipse at top, #1e1040 0%, #0a0a0f 70%); }
+        .hero h1 { font-size: 72px; font-weight: 900; line-height: 1.1; letter-spacing: -3px; margin-bottom: 24px; background: linear-gradient(135deg, #fff 0%, #a78bfa 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .hero p { font-size: 20px; color: rgba(255,255,255,0.5); max-width: 560px; margin: 0 auto 40px; }
         .hero-btns { display: flex; gap: 16px; justify-content: center; }
-        .btn-primary { background: #7c3aed; color: white; padding: 16px 36px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 17px; cursor: pointer; border: none; }
-        .btn-secondary { background: rgba(255,255,255,0.08); color: white; padding: 16px 36px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 17px; border: 1px solid rgba(255,255,255,0.15); cursor: pointer; }
-
+        .btn-primary { background: #7c3aed; color: white; padding: 16px 36px; border-radius: 10px; font-weight: 700; font-size: 17px; cursor: pointer; border: none; }
+        .btn-secondary { background: rgba(255,255,255,0.08); color: white; padding: 16px 36px; border-radius: 10px; font-weight: 600; font-size: 17px; border: 1px solid rgba(255,255,255,0.15); cursor: pointer; }
         .stats { display: flex; justify-content: center; gap: 60px; padding: 50px 20px; flex-wrap: wrap; border-top: 1px solid rgba(255,255,255,0.06); border-bottom: 1px solid rgba(255,255,255,0.06); }
         .stat h3 { font-size: 36px; font-weight: 900; color: #a78bfa; }
         .stat p { color: rgba(255,255,255,0.4); font-size: 14px; }
-
         .features { padding: 100px 60px; text-align: center; }
         .features h2 { font-size: 48px; font-weight: 900; margin-bottom: 16px; }
         .features > p { color: rgba(255,255,255,0.4); font-size: 18px; margin-bottom: 60px; }
         .cards { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; }
         .card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 36px 28px; width: 280px; text-align: left; transition: all 0.3s; }
-        .card:hover { background: rgba(124,58,237,0.1); border-color: rgba(124,58,237,0.4); transform: translateY(-4px); }
+        .card:hover { background: rgba(124,58,237,0.1); transform: translateY(-4px); }
         .card-icon { font-size: 36px; margin-bottom: 20px; }
         .card h3 { font-size: 20px; font-weight: 700; margin-bottom: 12px; }
         .card p { color: rgba(255,255,255,0.5); font-size: 15px; line-height: 1.6; }
 
-        /* AUTH MODAL */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; }
-        .modal-overlay.active { display: flex; }
+        /* MODAL */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-overlay.active { display: flex !important; }
         .modal { background: #13131a; border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 48px; width: 100%; max-width: 440px; position: relative; }
         .modal h2 { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
         .modal p { color: rgba(255,255,255,0.4); margin-bottom: 30px; }
-        .modal input { width: 100%; padding: 14px 18px; margin: 8px 0; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: white; font-size: 15px; outline: none; }
-        .modal button { width: 100%; padding: 16px; background: #7c3aed; color: white; border: none; border-radius: 10px; font-size: 17px; font-weight: 700; cursor: pointer; margin-top: 16px; }
-        .modal button:hover { background: #6d28d9; }
-        .modal-close { position: absolute; top: 20px; right: 20px; background: none; border: none; color: white; font-size: 24px; cursor: pointer; width: auto; padding: 0; margin: 0; }
+        .modal input { width: 100%; padding: 14px 18px; margin: 8px 0; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: white; font-size: 15px; outline: none; display: block; }
+        .modal-btn { width: 100%; padding: 16px; background: #7c3aed; color: white; border: none; border-radius: 10px; font-size: 17px; font-weight: 700; cursor: pointer; margin-top: 16px; display: block; }
+        .modal-close { position: absolute; top: 16px; right: 20px; background: none; border: none; color: white; font-size: 28px; cursor: pointer; line-height: 1; }
         .switch-text { text-align: center; margin-top: 20px; color: rgba(255,255,255,0.4); font-size: 14px; }
-        .switch-text span { color: #a78bfa; cursor: pointer; }
-        .msg { padding: 12px; border-radius: 8px; margin-top: 12px; font-size: 14px; text-align: center; }
-        .msg.success { background: rgba(34,197,94,0.15); color: #4ade80; }
-        .msg.error { background: rgba(239,68,68,0.15); color: #f87171; }
+        .switch-text span { color: #a78bfa; cursor: pointer; text-decoration: underline; }
+        .msg-success { background: rgba(34,197,94,0.15); color: #4ade80; padding: 12px; border-radius: 8px; margin-top: 12px; text-align: center; display: none; }
+        .msg-error { background: rgba(239,68,68,0.15); color: #f87171; padding: 12px; border-radius: 8px; margin-top: 12px; text-align: center; display: none; }
 
         /* DASHBOARD */
-        .dashboard { display: none; padding: 60px 40px; text-align: center; }
+        .dashboard { display: none; padding: 80px 40px; text-align: center; }
         .dashboard h2 { font-size: 40px; font-weight: 900; margin-bottom: 16px; }
         .dashboard p { color: rgba(255,255,255,0.5); font-size: 18px; margin-bottom: 40px; }
-        .dashboard-cards { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px; }
+        .d-cards { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px; }
         .d-card { background: rgba(124,58,237,0.1); border: 1px solid rgba(124,58,237,0.2); border-radius: 16px; padding: 30px; width: 200px; }
         .d-card h3 { font-size: 32px; font-weight: 900; color: #a78bfa; }
         .d-card p { color: rgba(255,255,255,0.4); font-size: 13px; margin-top: 4px; }
@@ -79,160 +60,158 @@
 </head>
 <body>
 
-    <nav>
-        <div class="logo"><img src="logo.png" style="height:40px; vertical-align:middle; margin-right:8px;">SkillSwap</div>
-        <div class="nav-links">
-            <a href="#features">Features</a>
-            <a href="#" onclick="showModal('login')">Login</a>
-            <a class="nav-btn" href="#" onclick="showModal('signup')">Get Started</a>
+<nav>
+    <div class="logo"><img src="logo.png" style="height:40px;vertical-align:middle;margin-right:8px;">SkillSwap</div>
+    <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#" id="navLogin">Login</a>
+        <a class="nav-btn" href="#" id="navSignup">Get Started</a>
+    </div>
+</nav>
+
+<div id="mainPage">
+    <section class="hero">
+        <div style="display:inline-block;background:rgba(167,139,250,0.15);color:#a78bfa;padding:6px 16px;border-radius:20px;font-size:13px;font-weight:600;margin-bottom:24px;border:1px solid rgba(167,139,250,0.3);">✨ Free Skill Exchange Platform</div>
+        <h1>Learn Anything.<br>Teach Everything.</h1>
+        <p>Connect with people worldwide and exchange skills — no money needed, just knowledge.</p>
+        <div class="hero-btns">
+            <button class="btn-primary" id="heroSignup">Start Swapping Free</button>
+            <button class="btn-secondary" id="heroLogin">Login</button>
         </div>
-    </nav>
+    </section>
 
-    <!-- MAIN PAGE -->
-    <div id="mainPage">
-        <section class="hero">
-            <div style="display:inline-block; background:rgba(167,139,250,0.15); color:#a78bfa; padding:6px 16px; border-radius:20px; font-size:13px; font-weight:600; margin-bottom:24px; border:1px solid rgba(167,139,250,0.3);">✨ Free Skill Exchange Platform</div>
-            <h1>Learn Anything.<br>Teach Everything.</h1>
-            <p>Connect with people worldwide and exchange skills — no money needed, just knowledge.</p>
-            <div class="hero-btns">
-                <button class="btn-primary" onclick="showModal('signup')">Start Swapping Free</button>
-                <button class="btn-secondary" onclick="showModal('login')">Login</button>
-            </div>
-        </section>
-
-        <div class="stats">
-            <div class="stat"><h3>10K+</h3><p>Active Members</p></div>
-            <div class="stat"><h3>50+</h3><p>Skills Available</p></div>
-            <div class="stat"><h3>95%</h3><p>Satisfaction Rate</p></div>
-            <div class="stat"><h3>150+</h3><p>Countries</p></div>
-        </div>
-
-        <section class="features" id="features">
-            <h2>Why SkillSwap?</h2>
-            <p>The smartest way to learn new skills without spending money</p>
-            <div class="cards">
-                <div class="card"><div class="card-icon">🎯</div><h3>List Your Skill</h3><p>Tell us what you can teach — coding, cooking, music, design, languages, anything!</p></div>
-                <div class="card"><div class="card-icon">🤖</div><h3>Smart Matching</h3><p>Our system finds the perfect skill match for you from thousands of members worldwide.</p></div>
-                <div class="card"><div class="card-icon">🌍</div><h3>Global Community</h3><p>Connect with learners and teachers from 150+ countries around the world.</p></div>
-                <div class="card"><div class="card-icon">🔒</div><h3>Safe & Secure</h3><p>Verified profiles and secure messaging to ensure your safety at all times.</p></div>
-            </div>
-        </section>
+    <div class="stats">
+        <div class="stat"><h3>10K+</h3><p>Active Members</p></div>
+        <div class="stat"><h3>50+</h3><p>Skills Available</p></div>
+        <div class="stat"><h3>95%</h3><p>Satisfaction Rate</p></div>
+        <div class="stat"><h3>150+</h3><p>Countries</p></div>
     </div>
 
-    <!-- DASHBOARD -->
-    <div class="dashboard" id="dashboard">
-        <h2>Welcome back! 👋</h2>
-        <p id="userEmail"></p>
-        <div class="dashboard-cards">
-            <div class="d-card"><h3>0</h3><p>Skill Matches</p></div>
-            <div class="d-card"><h3>0</h3><p>Sessions Done</p></div>
-            <div class="d-card"><h3>⭐ New</h3><p>Your Rating</p></div>
+    <section class="features" id="features">
+        <h2>Why SkillSwap?</h2>
+        <p>The smartest way to learn new skills without spending money</p>
+        <div class="cards">
+            <div class="card"><div class="card-icon">🎯</div><h3>List Your Skill</h3><p>Tell us what you can teach — coding, cooking, music, design, languages, anything!</p></div>
+            <div class="card"><div class="card-icon">🤖</div><h3>Smart Matching</h3><p>Our system finds the perfect skill match for you from thousands of members worldwide.</p></div>
+            <div class="card"><div class="card-icon">🌍</div><h3>Global Community</h3><p>Connect with learners and teachers from 150+ countries around the world.</p></div>
+            <div class="card"><div class="card-icon">🔒</div><h3>Safe & Secure</h3><p>Verified profiles and secure messaging to ensure your safety at all times.</p></div>
         </div>
-        <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+    </section>
+</div>
+
+<!-- DASHBOARD -->
+<div class="dashboard" id="dashboard">
+    <h2>Welcome to SkillSwap! 👋</h2>
+    <p id="userEmailShow"></p>
+    <div class="d-cards">
+        <div class="d-card"><h3>0</h3><p>Skill Matches</p></div>
+        <div class="d-card"><h3>0</h3><p>Sessions Done</p></div>
+        <div class="d-card"><h3>⭐ New</h3><p>Your Rating</p></div>
     </div>
+    <button class="logout-btn" id="logoutBtn">🚪 Logout</button>
+</div>
 
-    <!-- SIGNUP MODAL -->
-    <div class="modal-overlay" id="signupModal">
-        <div class="modal">
-            <button class="modal-close" onclick="closeModal('signup')">×</button>
-            <h2>Join SkillSwap 🚀</h2>
-            <p>Create your free account today</p>
-            <input type="email" id="signupEmail" placeholder="Your Email Address" />
-            <input type="password" id="signupPassword" placeholder="Create Password (min 6 chars)" />
-            <button onclick="signUp()">Create Account — It's Free!</button>
-            <div id="signupMsg"></div>
-            <div class="switch-text">Already have an account? <span onclick="switchModal('login')">Login here</span></div>
-        </div>
+<!-- SIGNUP MODAL -->
+<div class="modal-overlay" id="signupModal">
+    <div class="modal">
+        <button class="modal-close" id="closeSignup">×</button>
+        <h2>Join SkillSwap 🚀</h2>
+        <p>Create your free account today</p>
+        <input type="email" id="signupEmail" placeholder="Your Email Address" />
+        <input type="password" id="signupPassword" placeholder="Create Password (min 6 chars)" />
+        <button class="modal-btn" id="signupBtn">Create Account — It's Free!</button>
+        <div class="msg-success" id="signupSuccess">✅ Account created! Welcome!</div>
+        <div class="msg-error" id="signupError"></div>
+        <div class="switch-text">Already have an account? <span id="toLogin">Login here</span></div>
     </div>
+</div>
 
-    <!-- LOGIN MODAL -->
-    <div class="modal-overlay" id="loginModal">
-        <div class="modal">
-            <button class="modal-close" onclick="closeModal('login')">×</button>
-            <h2>Welcome Back! 👋</h2>
-            <p>Login to your SkillSwap account</p>
-            <input type="email" id="loginEmail" placeholder="Your Email Address" />
-            <input type="password" id="loginPassword" placeholder="Your Password" />
-            <button onclick="login()">Login</button>
-            <div id="loginMsg"></div>
-            <div class="switch-text">Don't have an account? <span onclick="switchModal('signup')">Sign up free</span></div>
-        </div>
+<!-- LOGIN MODAL -->
+<div class="modal-overlay" id="loginModal">
+    <div class="modal">
+        <button class="modal-close" id="closeLogin">×</button>
+        <h2>Welcome Back! 👋</h2>
+        <p>Login to your SkillSwap account</p>
+        <input type="email" id="loginEmail" placeholder="Your Email Address" />
+        <input type="password" id="loginPassword" placeholder="Your Password" />
+        <button class="modal-btn" id="loginBtn">Login</button>
+        <div class="msg-success" id="loginSuccess">✅ Welcome back!</div>
+        <div class="msg-error" id="loginError"></div>
+        <div class="switch-text">Don't have an account? <span id="toSignup">Sign up free</span></div>
     </div>
+</div>
 
-    <footer>
-        <p>© 2026 SkillSwap — Connect. Learn. Grow. | Made with ❤️ for the world</p>
-    </footer>
+<footer><p>© 2026 SkillSwap — Connect. Learn. Grow. | Made with ❤️ for the world</p></footer>
 
-    <script>
-        const SUPABASE_URL = 'https://ojztimrefyzssoilpgui.supabase.co';
-        const SUPABASE_KEY = 'sb_publishable_z6JYyQRJQP7I9ihlwAbmbA_Y7ihXOmA';
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+<script>
+    // Store users in localStorage
+    let users = JSON.parse(localStorage.getItem('skillswap_users') || '[]');
+    let currentUser = JSON.parse(localStorage.getItem('skillswap_current') || 'null');
 
-        // Check if user already logged in
-        async function checkUser() {
-            const { data: { user } } = await supabase.auth.getUser();
-            if (user) showDashboard(user);
-        }
-        checkUser();
+    if(currentUser) showDashboard(currentUser);
 
-        function showModal(type) {
-            document.getElementById(type + 'Modal').classList.add('active');
-        }
-        function closeModal(type) {
-            document.getElementById(type + 'Modal').classList.remove('active');
-        }
-        function switchModal(to) {
-            closeModal(to === 'login' ? 'signup' : 'login');
-            showModal(to);
-        }
+    // Button events
+    document.getElementById('heroSignup').onclick = () => openModal('signup');
+    document.getElementById('heroLogin').onclick = () => openModal('login');
+    document.getElementById('navSignup').onclick = (e) => { e.preventDefault(); openModal('signup'); };
+    document.getElementById('navLogin').onclick = (e) => { e.preventDefault(); openModal('login'); };
+    document.getElementById('closeSignup').onclick = () => closeModal('signup');
+    document.getElementById('closeLogin').onclick = () => closeModal('login');
+    document.getElementById('toLogin').onclick = () => { closeModal('signup'); openModal('login'); };
+    document.getElementById('toSignup').onclick = () => { closeModal('login'); openModal('signup'); };
+    document.getElementById('logoutBtn').onclick = logout;
 
-        async function signUp() {
-            const email = document.getElementById('signupEmail').value;
-            const password = document.getElementById('signupPassword').value;
-            const msg = document.getElementById('signupMsg');
+    document.getElementById('signupBtn').onclick = function() {
+        const email = document.getElementById('signupEmail').value;
+        const password = document.getElementById('signupPassword').value;
+        const err = document.getElementById('signupError');
+        const suc = document.getElementById('signupSuccess');
 
-            if(!email || !password) {
-                msg.innerHTML = '<div class="msg error">Please fill all fields!</div>';
-                return;
-            }
+        if(!email || !password) { err.textContent = '❌ Please fill all fields!'; err.style.display='block'; return; }
+        if(password.length < 6) { err.textContent = '❌ Password must be 6+ characters!'; err.style.display='block'; return; }
+        if(users.find(u => u.email === email)) { err.textContent = '❌ Email already registered!'; err.style.display='block'; return; }
 
-            const { data, error } = await supabase.auth.signUp({ email, password });
+        const user = { email, password };
+        users.push(user);
+        localStorage.setItem('skillswap_users', JSON.stringify(users));
+        localStorage.setItem('skillswap_current', JSON.stringify(user));
 
-            if(error) {
-                msg.innerHTML = '<div class="msg error">' + error.message + '</div>';
-            } else {
-                msg.innerHTML = '<div class="msg success">✅ Account created! Logging you in...</div>';
-                setTimeout(() => { closeModal('signup'); showDashboard(data.user); }, 1500);
-            }
-        }
+        err.style.display='none';
+        suc.style.display='block';
+        setTimeout(() => { closeModal('signup'); showDashboard(user); }, 1500);
+    };
 
-        async function login() {
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            const msg = document.getElementById('loginMsg');
+    document.getElementById('loginBtn').onclick = function() {
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+        const err = document.getElementById('loginError');
+        const suc = document.getElementById('loginSuccess');
 
-            const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+        const user = users.find(u => u.email === email && u.password === password);
+        if(!user) { err.textContent = '❌ Wrong email or password!'; err.style.display='block'; return; }
 
-            if(error) {
-                msg.innerHTML = '<div class="msg error">' + error.message + '</div>';
-            } else {
-                msg.innerHTML = '<div class="msg success">✅ Welcome back!</div>';
-                setTimeout(() => { closeModal('login'); showDashboard(data.user); }, 1000);
-            }
-        }
+        localStorage.setItem('skillswap_current', JSON.stringify(user));
+        err.style.display='none';
+        suc.style.display='block';
+        setTimeout(() => { closeModal('login'); showDashboard(user); }, 1000);
+    };
 
-        function showDashboard(user) {
-            document.getElementById('mainPage').style.display = 'none';
-            document.getElementById('dashboard').style.display = 'block';
-            document.getElementById('userEmail').textContent = '📧 ' + user.email;
-        }
-
-        async function logout() {
-            await supabase.auth.signOut();
-            document.getElementById('mainPage').style.display = 'block';
-            document.getElementById('dashboard').style.display = 'none';
-        }
-    </script>
-
+    function openModal(type) {
+        document.getElementById(type + 'Modal').classList.add('active');
+    }
+    function closeModal(type) {
+        document.getElementById(type + 'Modal').classList.remove('active');
+    }
+    function showDashboard(user) {
+        document.getElementById('mainPage').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+        document.getElementById('userEmailShow').textContent = '📧 ' + user.email;
+    }
+    function logout() {
+        localStorage.removeItem('skillswap_current');
+        document.getElementById('mainPage').style.display = 'block';
+        document.getElementById('dashboard').style.display = 'none';
+    }
+</script>
 </body>
 </html>
