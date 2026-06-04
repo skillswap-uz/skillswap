@@ -12,15 +12,20 @@
         .logo img { height: 40px; vertical-align: middle; margin-right: 8px; }
         .nav-links a { color: rgba(255,255,255,0.6); text-decoration: none; margin-left: 30px; font-size: 15px; }
         .nav-btn { background: #7c3aed; color: white; padding: 10px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; margin-left: 30px; }
+
+        /* HERO */
         .hero { text-align: center; padding: 120px 20px 80px; background: radial-gradient(ellipse at top, #1e1040 0%, #0a0a0f 70%); }
+        .hero-badge { display: inline-block; background: rgba(167,139,250,0.15); color: #a78bfa; padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; margin-bottom: 24px; border: 1px solid rgba(167,139,250,0.3); }
         .hero h1 { font-size: 72px; font-weight: 900; line-height: 1.1; letter-spacing: -3px; margin-bottom: 24px; background: linear-gradient(135deg, #fff 0%, #a78bfa 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .hero p { font-size: 20px; color: rgba(255,255,255,0.5); max-width: 560px; margin: 0 auto 40px; }
         .hero-btns { display: flex; gap: 16px; justify-content: center; }
         .btn-primary { background: #7c3aed; color: white; padding: 16px 36px; border-radius: 10px; font-weight: 700; font-size: 17px; cursor: pointer; border: none; }
         .btn-secondary { background: rgba(255,255,255,0.08); color: white; padding: 16px 36px; border-radius: 10px; font-weight: 600; font-size: 17px; border: 1px solid rgba(255,255,255,0.15); cursor: pointer; }
+
         .stats { display: flex; justify-content: center; gap: 60px; padding: 50px 20px; flex-wrap: wrap; border-top: 1px solid rgba(255,255,255,0.06); border-bottom: 1px solid rgba(255,255,255,0.06); }
         .stat h3 { font-size: 36px; font-weight: 900; color: #a78bfa; }
         .stat p { color: rgba(255,255,255,0.4); font-size: 14px; }
+
         .features { padding: 100px 60px; text-align: center; }
         .features h2 { font-size: 48px; font-weight: 900; margin-bottom: 16px; }
         .features > p { color: rgba(255,255,255,0.4); font-size: 18px; margin-bottom: 60px; }
@@ -34,10 +39,11 @@
         /* MODAL */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: center; }
         .modal-overlay.active { display: flex !important; }
-        .modal { background: #13131a; border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 48px; width: 100%; max-width: 440px; position: relative; }
+        .modal { background: #13131a; border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 48px; width: 100%; max-width: 440px; position: relative; max-height: 90vh; overflow-y: auto; }
         .modal h2 { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
         .modal p { color: rgba(255,255,255,0.4); margin-bottom: 30px; }
-        .modal input { width: 100%; padding: 14px 18px; margin: 8px 0; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: white; font-size: 15px; outline: none; display: block; }
+        .modal input, .modal select { width: 100%; padding: 14px 18px; margin: 8px 0; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: white; font-size: 15px; outline: none; display: block; }
+        .modal select option { background: #1a1a2e; }
         .modal-btn { width: 100%; padding: 16px; background: #7c3aed; color: white; border: none; border-radius: 10px; font-size: 17px; font-weight: 700; cursor: pointer; margin-top: 16px; display: block; }
         .modal-close { position: absolute; top: 16px; right: 20px; background: none; border: none; color: white; font-size: 28px; cursor: pointer; line-height: 1; }
         .switch-text { text-align: center; margin-top: 20px; color: rgba(255,255,255,0.4); font-size: 14px; }
@@ -46,16 +52,46 @@
         .msg-error { background: rgba(239,68,68,0.15); color: #f87171; padding: 12px; border-radius: 8px; margin-top: 12px; text-align: center; display: none; }
 
         /* DASHBOARD */
-        .dashboard { display: none; padding: 80px 40px; text-align: center; }
-        .dashboard h2 { font-size: 40px; font-weight: 900; margin-bottom: 16px; }
-        .dashboard p { color: rgba(255,255,255,0.5); font-size: 18px; margin-bottom: 40px; }
-        .d-cards { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px; }
-        .d-card { background: rgba(124,58,237,0.1); border: 1px solid rgba(124,58,237,0.2); border-radius: 16px; padding: 30px; width: 200px; }
-        .d-card h3 { font-size: 32px; font-weight: 900; color: #a78bfa; }
-        .d-card p { color: rgba(255,255,255,0.4); font-size: 13px; margin-top: 4px; }
-        .logout-btn { background: rgba(255,255,255,0.08); color: white; padding: 12px 30px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15); cursor: pointer; font-size: 15px; }
+        .dashboard { display: none; padding: 40px; max-width: 1000px; margin: 0 auto; }
+        .dash-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; flex-wrap: wrap; gap: 20px; }
+        .dash-header h2 { font-size: 32px; font-weight: 900; }
+        .dash-header p { color: rgba(255,255,255,0.4); margin-top: 4px; }
+        .logout-btn { background: rgba(255,255,255,0.08); color: white; padding: 10px 24px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15); cursor: pointer; font-size: 15px; }
 
-        footer { text-align: center; padding: 40px; border-top: 1px solid rgba(255,255,255,0.06); color: rgba(255,255,255,0.3); font-size: 14px; }
+        .dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 30px; }
+        .dash-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 28px; }
+        .dash-card h3 { font-size: 14px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+        .dash-card .big { font-size: 40px; font-weight: 900; color: #a78bfa; }
+        .dash-card .label { color: rgba(255,255,255,0.4); font-size: 13px; margin-top: 4px; }
+
+        /* PROFILE */
+        .profile-section { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 32px; margin-bottom: 24px; }
+        .profile-section h3 { font-size: 20px; font-weight: 700; margin-bottom: 20px; color: #a78bfa; }
+        .profile-row { display: flex; gap: 16px; flex-wrap: wrap; }
+        .profile-field { flex: 1; min-width: 200px; }
+        .profile-field label { display: block; font-size: 13px; color: rgba(255,255,255,0.4); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .profile-field input, .profile-field select { width: 100%; padding: 12px 16px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: white; font-size: 15px; outline: none; }
+        .profile-field input:focus, .profile-field select:focus { border-color: #7c3aed; }
+        .profile-field select option { background: #1a1a2e; }
+
+        .skills-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+        .skill-tag { background: rgba(124,58,237,0.2); border: 1px solid rgba(124,58,237,0.4); color: #a78bfa; padding: 8px 16px; border-radius: 20px; font-size: 14px; cursor: pointer; transition: all 0.2s; }
+        .skill-tag:hover { background: rgba(124,58,237,0.4); }
+        .skill-tag.selected { background: #7c3aed; color: white; border-color: #7c3aed; }
+
+        .save-btn { background: #7c3aed; color: white; padding: 14px 36px; border-radius: 10px; border: none; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 20px; }
+        .save-btn:hover { background: #6d28d9; }
+
+        /* MATCHES */
+        .matches-section { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 32px; margin-bottom: 24px; }
+        .matches-section h3 { font-size: 20px; font-weight: 700; margin-bottom: 20px; color: #a78bfa; }
+        .match-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 12px; }
+        .match-info h4 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+        .match-info p { color: rgba(255,255,255,0.4); font-size: 14px; }
+        .match-btn { background: #7c3aed; color: white; padding: 8px 20px; border-radius: 8px; border: none; cursor: pointer; font-size: 14px; font-weight: 600; }
+        .no-matches { text-align: center; color: rgba(255,255,255,0.3); padding: 40px; }
+
+        footer { text-align: center; padding: 40px; border-top: 1px solid rgba(255,255,255,0.06); color: rgba(255,255,255,0.3); font-size: 14px; margin-top: 40px; }
     </style>
 </head>
 <body>
@@ -69,9 +105,10 @@
     </div>
 </nav>
 
+<!-- MAIN PAGE -->
 <div id="mainPage">
     <section class="hero">
-        <div style="display:inline-block;background:rgba(167,139,250,0.15);color:#a78bfa;padding:6px 16px;border-radius:20px;font-size:13px;font-weight:600;margin-bottom:24px;border:1px solid rgba(167,139,250,0.3);">✨ Free Skill Exchange Platform</div>
+        <div class="hero-badge">✨ Free Skill Exchange Platform</div>
         <h1>Learn Anything.<br>Teach Everything.</h1>
         <p>Connect with people worldwide and exchange skills — no money needed, just knowledge.</p>
         <div class="hero-btns">
@@ -101,14 +138,108 @@
 
 <!-- DASHBOARD -->
 <div class="dashboard" id="dashboard">
-    <h2>Welcome to SkillSwap! 👋</h2>
-    <p id="userEmailShow"></p>
-    <div class="d-cards">
-        <div class="d-card"><h3>0</h3><p>Skill Matches</p></div>
-        <div class="d-card"><h3>0</h3><p>Sessions Done</p></div>
-        <div class="d-card"><h3>⭐ New</h3><p>Your Rating</p></div>
+    <div class="dash-header">
+        <div>
+            <h2 id="welcomeName">Welcome back! 👋</h2>
+            <p id="userEmailShow"></p>
+        </div>
+        <button class="logout-btn" id="logoutBtn">🚪 Logout</button>
     </div>
-    <button class="logout-btn" id="logoutBtn">🚪 Logout</button>
+
+    <div class="dash-grid">
+        <div class="dash-card"><h3>Skill Matches</h3><div class="big" id="matchCount">0</div><div class="label">People matched with you</div></div>
+        <div class="dash-card"><h3>Profile Status</h3><div class="big" id="profileStatus">⚠️</div><div class="label" id="profileLabel">Complete your profile</div></div>
+    </div>
+
+    <!-- PROFILE SETUP -->
+    <div class="profile-section">
+        <h3>👤 Your Profile</h3>
+        <div class="profile-row">
+            <div class="profile-field">
+                <label>Full Name</label>
+                <input type="text" id="fullName" placeholder="John Doe" />
+            </div>
+            <div class="profile-field">
+                <label>Country</label>
+                <select id="country">
+                    <option value="">Select Country</option>
+                    <option>United States</option>
+                    <option>United Kingdom</option>
+                    <option>Pakistan</option>
+                    <option>India</option>
+                    <option>Canada</option>
+                    <option>Australia</option>
+                    <option>Germany</option>
+                    <option>France</option>
+                    <option>UAE</option>
+                    <option>Other</option>
+                </select>
+            </div>
+        </div>
+        <div class="profile-row" style="margin-top:16px;">
+            <div class="profile-field">
+                <label>Age</label>
+                <input type="number" id="age" placeholder="25" min="13" max="100" />
+            </div>
+            <div class="profile-field">
+                <label>Spoken Language</label>
+                <select id="language">
+                    <option value="">Select Language</option>
+                    <option>English</option>
+                    <option>Urdu</option>
+                    <option>Hindi</option>
+                    <option>Arabic</option>
+                    <option>French</option>
+                    <option>Spanish</option>
+                    <option>German</option>
+                    <option>Other</option>
+                </select>
+            </div>
+        </div>
+
+        <div style="margin-top:24px;">
+            <label style="font-size:13px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.5px;">🎓 Skills I Can Teach</label>
+            <div class="skills-grid" id="teachSkills">
+                <div class="skill-tag" data-skill="Coding">💻 Coding</div>
+                <div class="skill-tag" data-skill="Design">🎨 Design</div>
+                <div class="skill-tag" data-skill="Music">🎵 Music</div>
+                <div class="skill-tag" data-skill="Cooking">🍳 Cooking</div>
+                <div class="skill-tag" data-skill="English">🗣️ English</div>
+                <div class="skill-tag" data-skill="Math">📐 Math</div>
+                <div class="skill-tag" data-skill="Photography">📸 Photography</div>
+                <div class="skill-tag" data-skill="Marketing">📢 Marketing</div>
+                <div class="skill-tag" data-skill="Fitness">💪 Fitness</div>
+                <div class="skill-tag" data-skill="Writing">✍️ Writing</div>
+            </div>
+        </div>
+
+        <div style="margin-top:24px;">
+            <label style="font-size:13px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.5px;">📚 Skills I Want To Learn</label>
+            <div class="skills-grid" id="learnSkills">
+                <div class="skill-tag" data-skill="Coding">💻 Coding</div>
+                <div class="skill-tag" data-skill="Design">🎨 Design</div>
+                <div class="skill-tag" data-skill="Music">🎵 Music</div>
+                <div class="skill-tag" data-skill="Cooking">🍳 Cooking</div>
+                <div class="skill-tag" data-skill="English">🗣️ English</div>
+                <div class="skill-tag" data-skill="Math">📐 Math</div>
+                <div class="skill-tag" data-skill="Photography">📸 Photography</div>
+                <div class="skill-tag" data-skill="Marketing">📢 Marketing</div>
+                <div class="skill-tag" data-skill="Fitness">💪 Fitness</div>
+                <div class="skill-tag" data-skill="Writing">✍️ Writing</div>
+            </div>
+        </div>
+
+        <button class="save-btn" id="saveProfile">💾 Save Profile</button>
+        <div class="msg-success" id="profileSaved">✅ Profile saved successfully!</div>
+    </div>
+
+    <!-- MATCHES -->
+    <div class="matches-section">
+        <h3>🤝 Your Skill Matches</h3>
+        <div id="matchesList">
+            <div class="no-matches">Complete your profile to find skill matches! 🎯</div>
+        </div>
+    </div>
 </div>
 
 <!-- SIGNUP MODAL -->
@@ -144,13 +275,19 @@
 <footer><p>© 2026 SkillSwap — Connect. Learn. Grow. | Made with ❤️ for the world</p></footer>
 
 <script>
-    // Store users in localStorage
-    let users = JSON.parse(localStorage.getItem('skillswap_users') || '[]');
-    let currentUser = JSON.parse(localStorage.getItem('skillswap_current') || 'null');
+    let users = JSON.parse(localStorage.getItem('ss_users') || '[]');
+    let currentUser = JSON.parse(localStorage.getItem('ss_current') || 'null');
 
     if(currentUser) showDashboard(currentUser);
 
-    // Button events
+    // Skill tag selection
+    document.querySelectorAll('#teachSkills .skill-tag').forEach(tag => {
+        tag.onclick = () => tag.classList.toggle('selected');
+    });
+    document.querySelectorAll('#learnSkills .skill-tag').forEach(tag => {
+        tag.onclick = () => tag.classList.toggle('selected');
+    });
+
     document.getElementById('heroSignup').onclick = () => openModal('signup');
     document.getElementById('heroLogin').onclick = () => openModal('login');
     document.getElementById('navSignup').onclick = (e) => { e.preventDefault(); openModal('signup'); };
@@ -166,17 +303,15 @@
         const password = document.getElementById('signupPassword').value;
         const err = document.getElementById('signupError');
         const suc = document.getElementById('signupSuccess');
-
-        if(!email || !password) { err.textContent = '❌ Please fill all fields!'; err.style.display='block'; return; }
-        if(password.length < 6) { err.textContent = '❌ Password must be 6+ characters!'; err.style.display='block'; return; }
-        if(users.find(u => u.email === email)) { err.textContent = '❌ Email already registered!'; err.style.display='block'; return; }
-
-        const user = { email, password };
-        users.push(user);
-        localStorage.setItem('skillswap_users', JSON.stringify(users));
-        localStorage.setItem('skillswap_current', JSON.stringify(user));
-
         err.style.display='none';
+        if(!email || !password) { err.textContent='❌ Please fill all fields!'; err.style.display='block'; return; }
+        if(password.length < 6) { err.textContent='❌ Password must be 6+ characters!'; err.style.display='block'; return; }
+        if(users.find(u => u.email === email)) { err.textContent='❌ Email already registered!'; err.style.display='block'; return; }
+        const user = { email, password, profile: null };
+        users.push(user);
+        localStorage.setItem('ss_users', JSON.stringify(users));
+        localStorage.setItem('ss_current', JSON.stringify(user));
+        currentUser = user;
         suc.style.display='block';
         setTimeout(() => { closeModal('signup'); showDashboard(user); }, 1500);
     };
@@ -186,29 +321,105 @@
         const password = document.getElementById('loginPassword').value;
         const err = document.getElementById('loginError');
         const suc = document.getElementById('loginSuccess');
-
-        const user = users.find(u => u.email === email && u.password === password);
-        if(!user) { err.textContent = '❌ Wrong email or password!'; err.style.display='block'; return; }
-
-        localStorage.setItem('skillswap_current', JSON.stringify(user));
         err.style.display='none';
+        const user = users.find(u => u.email === email && u.password === password);
+        if(!user) { err.textContent='❌ Wrong email or password!'; err.style.display='block'; return; }
+        localStorage.setItem('ss_current', JSON.stringify(user));
+        currentUser = user;
         suc.style.display='block';
         setTimeout(() => { closeModal('login'); showDashboard(user); }, 1000);
     };
 
-    function openModal(type) {
-        document.getElementById(type + 'Modal').classList.add('active');
+    document.getElementById('saveProfile').onclick = function() {
+        const name = document.getElementById('fullName').value;
+        const country = document.getElementById('country').value;
+        const age = document.getElementById('age').value;
+        const language = document.getElementById('language').value;
+        const teachSkills = [...document.querySelectorAll('#teachSkills .skill-tag.selected')].map(t => t.dataset.skill);
+        const learnSkills = [...document.querySelectorAll('#learnSkills .skill-tag.selected')].map(t => t.dataset.skill);
+
+        if(!name || !country) {
+            alert('Please fill Name and Country!');
+            return;
+        }
+
+        const profile = { name, country, age, language, teachSkills, learnSkills };
+        currentUser.profile = profile;
+
+        const idx = users.findIndex(u => u.email === currentUser.email);
+        if(idx !== -1) users[idx] = currentUser;
+        localStorage.setItem('ss_users', JSON.stringify(users));
+        localStorage.setItem('ss_current', JSON.stringify(currentUser));
+
+        document.getElementById('profileSaved').style.display = 'block';
+        setTimeout(() => document.getElementById('profileSaved').style.display = 'none', 3000);
+
+        document.getElementById('profileStatus').textContent = '✅';
+        document.getElementById('profileLabel').textContent = 'Profile Complete!';
+        document.getElementById('welcomeName').textContent = 'Welcome, ' + name + '! 👋';
+
+        findMatches(learnSkills, teachSkills);
+    };
+
+    function findMatches(learnSkills, myTeachSkills) {
+        const matches = users.filter(u => {
+            if(u.email === currentUser.email) return false;
+            if(!u.profile) return false;
+            const theyTeach = u.profile.teachSkills || [];
+            const theyLearn = u.profile.learnSkills || [];
+            const iCanTeachThem = myTeachSkills.some(s => theyLearn.includes(s));
+            const theyCanTeachMe = theyTeach.some(s => learnSkills.includes(s));
+            return iCanTeachThem && theyCanTeachMe;
+        });
+
+        document.getElementById('matchCount').textContent = matches.length;
+        const list = document.getElementById('matchesList');
+
+        if(matches.length === 0) {
+            list.innerHTML = '<div class="no-matches">No matches yet — invite friends to join SkillSwap! 🎯</div>';
+        } else {
+            list.innerHTML = matches.map(m => `
+                <div class="match-card">
+                    <div class="match-info">
+                        <h4>${m.profile.name} — ${m.profile.country}</h4>
+                        <p>Teaches: ${m.profile.teachSkills.join(', ')} | Wants: ${m.profile.learnSkills.join(', ')}</p>
+                    </div>
+                    <button class="match-btn" onclick="alert('Connect feature coming soon! 🚀')">Connect</button>
+                </div>
+            `).join('');
+        }
     }
-    function closeModal(type) {
-        document.getElementById(type + 'Modal').classList.remove('active');
-    }
+
+    function openModal(type) { document.getElementById(type + 'Modal').classList.add('active'); }
+    function closeModal(type) { document.getElementById(type + 'Modal').classList.remove('active'); }
+
     function showDashboard(user) {
         document.getElementById('mainPage').style.display = 'none';
         document.getElementById('dashboard').style.display = 'block';
         document.getElementById('userEmailShow').textContent = '📧 ' + user.email;
+        if(user.profile) {
+            document.getElementById('fullName').value = user.profile.name || '';
+            document.getElementById('country').value = user.profile.country || '';
+            document.getElementById('age').value = user.profile.age || '';
+            document.getElementById('language').value = user.profile.language || '';
+            document.getElementById('welcomeName').textContent = 'Welcome, ' + user.profile.name + '! 👋';
+            document.getElementById('profileStatus').textContent = '✅';
+            document.getElementById('profileLabel').textContent = 'Profile Complete!';
+            user.profile.teachSkills?.forEach(s => {
+                const el = document.querySelector(`#teachSkills [data-skill="${s}"]`);
+                if(el) el.classList.add('selected');
+            });
+            user.profile.learnSkills?.forEach(s => {
+                const el = document.querySelector(`#learnSkills [data-skill="${s}"]`);
+                if(el) el.classList.add('selected');
+            });
+            findMatches(user.profile.learnSkills || [], user.profile.teachSkills || []);
+        }
     }
+
     function logout() {
-        localStorage.removeItem('skillswap_current');
+        localStorage.removeItem('ss_current');
+        currentUser = null;
         document.getElementById('mainPage').style.display = 'block';
         document.getElementById('dashboard').style.display = 'none';
     }
