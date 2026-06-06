@@ -338,7 +338,7 @@
                         <h4>${p.name} — ${p.country}</h4>
                         <p>Teaches: ${(p.teachSkills||[]).join(', ')} | Wants: ${(p.learnSkills||[]).join(', ')}</p>
                     </div>
-                    <button class="match-btn" onclick="alert('Connect feature coming soon! 🚀')">Connect</button>
+                    <button class="match-btn" onclick="alert('📧 Contact: ' + p.email + '\n\nEmail them to start swapping!')">Connect</button>
                 </div>
             `).join('');
         }
@@ -372,4 +372,4 @@
     function closeModal(type) { document.getElementById(type+'Modal').classList.remove('active'); }
 </script>
 </body>
-</html>
+</html>ss
