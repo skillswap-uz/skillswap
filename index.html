@@ -33,7 +33,7 @@
         .card p { color: rgba(255,255,255,0.5); font-size: 15px; line-height: 1.6; }
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: center; }
         .modal-overlay.active { display: flex !important; }
-        .modal { background: #13131a; border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 48px; width: 100%; max-width: 440px; position: relative; }
+        .modal { background: #13131a; border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 48px; width: 100%; max-width: 480px; position: relative; max-height: 90vh; overflow-y: auto; }
         .modal h2 { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
         .modal p { color: rgba(255,255,255,0.4); margin-bottom: 30px; }
         .modal input { width: 100%; padding: 14px 18px; margin: 8px 0; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: white; font-size: 15px; outline: none; display: block; }
@@ -71,6 +71,15 @@
         .match-info p { color: rgba(255,255,255,0.4); font-size: 14px; }
         .match-btn { background: #7c3aed; color: white; padding: 8px 20px; border-radius: 8px; border: none; cursor: pointer; font-size: 14px; font-weight: 600; }
         .no-matches { text-align: center; color: rgba(255,255,255,0.3); padding: 40px; }
+        .connect-modal-body { text-align: center; }
+        .connect-modal-body .avatar { width: 80px; height: 80px; background: linear-gradient(135deg, #7c3aed, #a78bfa); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; margin: 0 auto 20px; }
+        .connect-modal-body h3 { font-size: 24px; font-weight: 800; margin-bottom: 8px; }
+        .connect-modal-body .email-box { background: rgba(124,58,237,0.15); border: 1px solid rgba(124,58,237,0.3); border-radius: 12px; padding: 16px; margin: 20px 0; }
+        .connect-modal-body .email-box p { color: rgba(255,255,255,0.6); font-size: 13px; margin-bottom: 8px; }
+        .connect-modal-body .email-box h4 { color: #a78bfa; font-size: 16px; font-weight: 700; }
+        .connect-modal-body .skills-show { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 16px 0; }
+        .connect-modal-body .skill-show-tag { background: rgba(124,58,237,0.2); color: #a78bfa; padding: 6px 14px; border-radius: 20px; font-size: 13px; }
+        .email-link { display: inline-block; background: #7c3aed; color: white; padding: 14px 30px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 16px; margin-top: 16px; }
         footer { text-align: center; padding: 40px; border-top: 1px solid rgba(255,255,255,0.06); color: rgba(255,255,255,0.3); font-size: 14px; margin-top: 40px; }
     </style>
 </head>
@@ -184,6 +193,7 @@
     </div>
 </div>
 
+<!-- AUTH MODALS -->
 <div class="modal-overlay" id="signupModal">
     <div class="modal">
         <button class="modal-close" id="closeSignup">×</button>
@@ -212,11 +222,36 @@
     </div>
 </div>
 
+<!-- CONNECT MODAL -->
+<div class="modal-overlay" id="connectModal">
+    <div class="modal">
+        <button class="modal-close" id="closeConnect">×</button>
+        <div class="connect-modal-body">
+            <div class="avatar">👤</div>
+            <h3 id="connectName">Name</h3>
+            <p id="connectCountry" style="color:rgba(255,255,255,0.4);margin-bottom:0;">Country</p>
+            <div class="email-box">
+                <p>📧 Contact Email</p>
+                <h4 id="connectEmail">email@example.com</h4>
+            </div>
+            <div>
+                <p style="color:rgba(255,255,255,0.4);font-size:13px;margin-bottom:8px;">🎓 They can teach you:</p>
+                <div class="skills-show" id="connectTeach"></div>
+            </div>
+            <div style="margin-top:12px;">
+                <p style="color:rgba(255,255,255,0.4);font-size:13px;margin-bottom:8px;">📚 They want to learn:</p>
+                <div class="skills-show" id="connectLearn"></div>
+            </div>
+            <a href="#" id="connectEmailLink" class="email-link">📩 Send Email to Connect</a>
+        </div>
+    </div>
+</div>
+
 <footer><p>© 2026 SkillSwap — Connect. Learn. Grow. | Made with ❤️ for the world</p></footer>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
-    import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-database.js";
+    import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-database.js";
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
 
     const firebaseConfig = {
@@ -233,66 +268,63 @@
     const db = getDatabase(app);
     const auth = getAuth(app);
 
-    // Auth state
     onAuthStateChanged(auth, async (user) => {
         if(user) {
-            const snap = await get(child(ref(db), `users/${user.uid}`));
-            const profile = snap.exists() ? snap.val() : null;
-            showDashboard(user, profile);
+            const snap = await get(ref(db, `users/${user.uid}`));
+            showDashboard(user, snap.exists() ? snap.val() : null);
         }
     });
 
-    // Skill tags
-    document.querySelectorAll('#teachSkills .skill-tag').forEach(tag => {
-        tag.onclick = () => tag.classList.toggle('selected');
-    });
-    document.querySelectorAll('#learnSkills .skill-tag').forEach(tag => {
-        tag.onclick = () => tag.classList.toggle('selected');
-    });
+    document.querySelectorAll('#teachSkills .skill-tag').forEach(t => t.onclick = () => t.classList.toggle('selected'));
+    document.querySelectorAll('#learnSkills .skill-tag').forEach(t => t.onclick = () => t.classList.toggle('selected'));
 
     document.getElementById('heroSignup').onclick = () => openModal('signup');
     document.getElementById('heroLogin').onclick = () => openModal('login');
-    document.getElementById('navSignup').onclick = (e) => { e.preventDefault(); openModal('signup'); };
-    document.getElementById('navLogin').onclick = (e) => { e.preventDefault(); openModal('login'); };
+    document.getElementById('navSignup').onclick = e => { e.preventDefault(); openModal('signup'); };
+    document.getElementById('navLogin').onclick = e => { e.preventDefault(); openModal('login'); };
     document.getElementById('closeSignup').onclick = () => closeModal('signup');
     document.getElementById('closeLogin').onclick = () => closeModal('login');
+    document.getElementById('closeConnect').onclick = () => closeModal('connect');
     document.getElementById('toLogin').onclick = () => { closeModal('signup'); openModal('login'); };
     document.getElementById('toSignup').onclick = () => { closeModal('login'); openModal('signup'); };
-    document.getElementById('logoutBtn').onclick = () => signOut(auth);
+    document.getElementById('logoutBtn').onclick = () => signOut(auth).then(() => {
+        document.getElementById('mainPage').style.display = 'block';
+        document.getElementById('dashboard').style.display = 'none';
+    });
 
-    document.getElementById('signupBtn').onclick = async function() {
+    document.getElementById('signupBtn').onclick = async () => {
         const email = document.getElementById('signupEmail').value;
         const password = document.getElementById('signupPassword').value;
         const err = document.getElementById('signupError');
         const suc = document.getElementById('signupSuccess');
-        err.style.display='none';
+        err.style.display = 'none';
         try {
             await createUserWithEmailAndPassword(auth, email, password);
-            suc.style.display='block';
+            suc.style.display = 'block';
             setTimeout(() => closeModal('signup'), 1500);
         } catch(e) {
             err.textContent = '❌ ' + e.message;
-            err.style.display='block';
+            err.style.display = 'block';
         }
     };
 
-    document.getElementById('loginBtn').onclick = async function() {
+    document.getElementById('loginBtn').onclick = async () => {
         const email = document.getElementById('loginEmail').value;
         const password = document.getElementById('loginPassword').value;
         const err = document.getElementById('loginError');
         const suc = document.getElementById('loginSuccess');
-        err.style.display='none';
+        err.style.display = 'none';
         try {
             await signInWithEmailAndPassword(auth, email, password);
-            suc.style.display='block';
+            suc.style.display = 'block';
             setTimeout(() => closeModal('login'), 1000);
         } catch(e) {
             err.textContent = '❌ Wrong email or password!';
-            err.style.display='block';
+            err.style.display = 'block';
         }
     };
 
-    document.getElementById('saveProfile').onclick = async function() {
+    document.getElementById('saveProfile').onclick = async () => {
         const user = auth.currentUser;
         if(!user) return;
         const name = document.getElementById('fullName').value;
@@ -307,11 +339,11 @@
             email: user.email
         };
         await set(ref(db, `users/${user.uid}`), profile);
-        document.getElementById('profileSaved').style.display='block';
-        setTimeout(() => document.getElementById('profileSaved').style.display='none', 3000);
-        document.getElementById('profileStatus').textContent='✅';
-        document.getElementById('profileLabel').textContent='Profile Complete!';
-        document.getElementById('welcomeName').textContent='Welcome, ' + name + '! 👋';
+        document.getElementById('profileSaved').style.display = 'block';
+        setTimeout(() => document.getElementById('profileSaved').style.display = 'none', 3000);
+        document.getElementById('profileStatus').textContent = '✅';
+        document.getElementById('profileLabel').textContent = 'Profile Complete!';
+        document.getElementById('welcomeName').textContent = 'Welcome, ' + name + '! 👋';
         loadMatches(user.uid, profile);
     };
 
@@ -321,10 +353,8 @@
         const all = snap.val();
         const matches = Object.entries(all).filter(([id, p]) => {
             if(id === uid) return false;
-            const theyTeach = p.teachSkills || [];
-            const theyLearn = p.learnSkills || [];
-            const iCanTeach = (myProfile.teachSkills||[]).some(s => theyLearn.includes(s));
-            const theyCanTeach = theyTeach.some(s => (myProfile.learnSkills||[]).includes(s));
+            const iCanTeach = (myProfile.teachSkills||[]).some(s => (p.learnSkills||[]).includes(s));
+            const theyCanTeach = (p.teachSkills||[]).some(s => (myProfile.learnSkills||[]).includes(s));
             return iCanTeach && theyCanTeach;
         });
         document.getElementById('matchCount').textContent = matches.length;
@@ -338,24 +368,39 @@
                         <h4>${p.name} — ${p.country}</h4>
                         <p>Teaches: ${(p.teachSkills||[]).join(', ')} | Wants: ${(p.learnSkills||[]).join(', ')}</p>
                     </div>
-                    <button class="match-btn" onclick="alert('📧 Contact: ' + p.email + '\n\nEmail them to start swapping!')">Connect</button>
+                    <button class="match-btn" data-id="${id}">Connect 🤝</button>
                 </div>
             `).join('');
+
+            // Connect buttons
+            list.querySelectorAll('.match-btn').forEach(btn => {
+                btn.onclick = () => {
+                    const pid = btn.dataset.id;
+                    const p = all[pid];
+                    document.getElementById('connectName').textContent = p.name;
+                    document.getElementById('connectCountry').textContent = '📍 ' + p.country;
+                    document.getElementById('connectEmail').textContent = p.email;
+                    document.getElementById('connectEmailLink').href = 'mailto:' + p.email + '?subject=SkillSwap Connection Request&body=Hi ' + p.name + '! I found you on SkillSwap and I would love to exchange skills with you!';
+                    document.getElementById('connectTeach').innerHTML = (p.teachSkills||[]).map(s => `<span class="skill-show-tag">${s}</span>`).join('');
+                    document.getElementById('connectLearn').innerHTML = (p.learnSkills||[]).map(s => `<span class="skill-show-tag">${s}</span>`).join('');
+                    openModal('connect');
+                };
+            });
         }
     }
 
     function showDashboard(user, profile) {
-        document.getElementById('mainPage').style.display='none';
-        document.getElementById('dashboard').style.display='block';
-        document.getElementById('userEmailShow').textContent='📧 ' + user.email;
+        document.getElementById('mainPage').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+        document.getElementById('userEmailShow').textContent = '📧 ' + user.email;
         if(profile) {
             document.getElementById('fullName').value = profile.name || '';
             document.getElementById('country').value = profile.country || '';
             document.getElementById('age').value = profile.age || '';
             document.getElementById('language').value = profile.language || '';
             document.getElementById('welcomeName').textContent = 'Welcome, ' + profile.name + '! 👋';
-            document.getElementById('profileStatus').textContent='✅';
-            document.getElementById('profileLabel').textContent='Profile Complete!';
+            document.getElementById('profileStatus').textContent = '✅';
+            document.getElementById('profileLabel').textContent = 'Profile Complete!';
             (profile.teachSkills||[]).forEach(s => {
                 const el = document.querySelector(`#teachSkills [data-skill="${s}"]`);
                 if(el) el.classList.add('selected');
@@ -372,4 +417,4 @@
     function closeModal(type) { document.getElementById(type+'Modal').classList.remove('active'); }
 </script>
 </body>
-</html>ss
+</html>
